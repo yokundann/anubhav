@@ -1,0 +1,186 @@
+/* education.css */
+.crate-section {
+  position: relative;
+  padding: var(--section-pad) var(--gutter);
+  background: var(--night);
+  overflow: hidden;
+}
+
+.crate-section-inner {
+  max-width: var(--max);
+  margin-inline: auto;
+}
+
+.crate-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.crate {
+  background: var(--tray);
+  border: 1px solid var(--steel-edge);
+  border-radius: 16px;
+  padding: 24px 20px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  perspective: 800px;
+}
+
+.crate-label {
+  font-family: var(--f-sign);
+  font-size: 11px;
+  color: var(--fog-2);
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--steel-edge);
+}
+
+#crateRow {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-color: var(--steel-line) transparent;
+  scrollbar-width: thin;
+}
+
+button.sleeve {
+  flex: 0 0 100px;
+  height: 100px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.3s var(--ease-out), border-color 0.2s;
+  position: relative;
+  transform-origin: bottom center;
+  background: transparent;
+  padding: 0;
+}
+button.sleeve:hover { transform: translateY(-8px) rotateX(4deg); }
+button.sleeve[aria-selected="true"] {
+  border-color: var(--lamp-amber);
+  transform: translateY(-16px) scale(1.05);
+  z-index: 2;
+}
+
+.sleeve-face {
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.sleeve-year {
+  font-family: var(--f-sign);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+
+.sleeve-title {
+  font-family: var(--f-sign);
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+/* Geometric art on sleeve */
+.sleeve-art {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px; height: 60px;
+  opacity: 0.15;
+}
+.sleeve-art circle, .sleeve-art rect {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+/* Vinyl slide out */
+.vinyl {
+  position: absolute;
+  left: -4px; top: 0; bottom: 0;
+  width: 100%; height: 100%;
+  background:
+    radial-gradient(circle at 50%, transparent 24px, #0f1119 24px),
+    repeating-radial-gradient(circle at 50%, #1a1e28 0px, #1a1e28 2px, #0f1119 2px, #0f1119 4px);
+  border-radius: 50%;
+  width: 90px; height: 90px;
+  top: 5px; left: 5px;
+  transition: transform 0.5s var(--ease-out);
+  z-index: -1;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.4);
+}
+button.sleeve[aria-selected="true"] .vinyl { transform: translateX(-50px); }
+
+/* Detail panel */
+.edu-detail {
+  min-height: 280px;
+}
+
+.edu-card {
+  background: var(--paper);
+  color: var(--paper-ink);
+  border-radius: 10px;
+  padding: 32px;
+  box-shadow: var(--paper-shadow);
+  animation: swapIn 0.35s var(--ease-out) both;
+}
+
+.edu-kind {
+  font-family: var(--f-sign);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--paper-meta);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.edu-heading {
+  font-family: var(--f-sign);
+  font-size: 1.5rem;
+  color: var(--paper-ink);
+  margin-bottom: 8px;
+  line-height: 1.1;
+}
+
+.edu-meta {
+  font-size: 13px;
+  color: var(--paper-meta);
+  margin-bottom: 16px;
+}
+
+.edu-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.edu-lines li {
+  font-size: 14px;
+  color: var(--paper-ink);
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.5;
+}
+.edu-lines li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--pink);
+}
+
+@media (max-width: 1080px) {
+  .crate-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  #crateRow { flex-wrap: nowrap; }
+  button.sleeve { flex: 0 0 80px; height: 80px; }
+}
