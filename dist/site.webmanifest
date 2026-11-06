@@ -1,0 +1,21 @@
+{
+  "name": "Anubhav Khati",
+  "short_name": "Anubhav",
+  "description": "Visual Artist & Visual Storyteller, Kathmandu",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0d12",
+  "theme_color": "#0b0d12",
+  "icons": [
+    {
+      "src": "/assets/images/anubhav-avatar.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/assets/images/anubhav-avatar.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
