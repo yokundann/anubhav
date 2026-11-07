@@ -17,7 +17,7 @@
   <meta name="twitter:description" content="Kathmandu-based visual artist: art direction, production design, photography and film." />
   <meta name="twitter:image" content="/assets/images/anubhav-avatar.jpg" />
 
-  <meta name="theme-color" content="#080808" />
+  <meta name="theme-color" content="#15171a" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/assets/images/anubhav-avatar.jpg" />
   <link rel="manifest" href="/site.webmanifest" />
@@ -25,6 +25,13 @@
   <!-- Progressive enhancement flag: reveal states only apply when JS runs -->
   <script>
     document.documentElement.classList.add('js');
+    /* Day / night: saved choice, else the system preference (default night). Set before first paint to avoid a flash. */
+    (function () {
+      var m = null;
+      try { m = localStorage.getItem('mode'); } catch (e) {}
+      if (m !== 'day' && m !== 'night') m = matchMedia('(prefers-color-scheme: light)').matches ? 'day' : 'night';
+      document.documentElement.setAttribute('data-mode', m);
+    })();
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('reduce');
   </script>
   <script>
@@ -33,10 +40,10 @@
   </script>
   <noscript><style>.preloader{display:none!important}.header{transform:none!important}</style></noscript>
 
-  <!-- Fonts: Cormorant Garamond (display), Manrope (body), labels use the Helvetica system stack, see tokens.css -->
+  <!-- Fonts: Cormorant Garamond (display), Manrope (body), Space Grotesk (Neo Grotesque Futurism: hero, labels, nav, buttons, stats). Labels, nav, buttons and captions use the Helvetica system stack (tokens.css: --f-label). No monospace fonts. -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Manrope:wght@300..700&family=Noto+Serif+Devanagari:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Manrope:wght@300..700&family=Space+Grotesk:wght@300..700&family=Noto+Serif+Devanagari:wght@300;400;500&family=Caveat:wght@400..700&family=Pinyon+Script&display=swap" rel="stylesheet" />
 
   <!-- CSS -->
   <link rel="stylesheet" href="/src/styles/tokens.css" />
@@ -51,6 +58,7 @@
   <link rel="stylesheet" href="/src/styles/sections/interests.css" />
   <link rel="stylesheet" href="/src/styles/sections/contact.css" />
   <link rel="stylesheet" href="/src/styles/sections/footer.css" />
+  <link rel="stylesheet" href="/src/styles/sections/cinema.css" />
 
   <script type="application/ld+json">
   {
@@ -83,6 +91,8 @@
     <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="13,5 20,12 13,19"/></symbol>
     <symbol id="i-up-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="18" x2="18" y2="6"/><polyline points="8,6 18,6 18,16"/></symbol>
     <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="14" y2="15"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M5.3 18.7L7 17M17 7l1.7-1.7"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.2A8.2 8.2 0 019.8 4a8.2 8.2 0 1010.2 10.2z"/></symbol>
     <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
     <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></symbol>
     <symbol id="i-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></symbol>
@@ -95,8 +105,11 @@
   <div class="preloader__panel preloader__panel--top"></div>
   <div class="preloader__panel preloader__panel--bot"></div>
   <div class="preloader__core">
-    <p class="preloader__label">Anubhav Khati · Portfolio</p>
-    <p class="preloader__count"><span id="preCount">000</span><i>%</i></p>
+    <p class="preloader__name" id="preName"><span class="preloader__word">Anubhav</span> <span class="preloader__word preloader__word--em">Khati</span></p>
+    <div class="preloader__meta">
+      <p class="preloader__label">portfolio, Kathmandu</p>
+      <p class="preloader__count"><span id="preCount">000</span><i>%</i></p>
+    </div>
     <div class="preloader__bar"><span id="preBar"></span></div>
   </div>
 </div>
@@ -129,6 +142,7 @@
     <a href="mailto:anubhavkhati@gmail.com?subject=Let%27s%20work%20together" class="btn btn--sm" data-magnetic="0.25">
       <svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg> Email me
     </a>
+    <button class="round-btn mode-toggle" id="modeToggle" type="button" aria-label="Switch to day mode" aria-pressed="false"><svg class="icon icon-sun" aria-hidden="true"><use href="#i-sun"/></svg><svg class="icon icon-moon" aria-hidden="true"><use href="#i-moon"/></svg></button>
     <button class="round-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg></button>
   </div>
 </header>
@@ -160,9 +174,24 @@
     <div class="hero__spot" id="heroSpot" aria-hidden="true"></div>
     <div class="hero__lines" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 
+    <!-- Cinematic background: light leaks, lens aperture, projector flicker, film-edge sprockets, scratches, viewfinder HUD -->
+    <div class="hero__fx" aria-hidden="true">
+      <i class="fx-leak fx-leak--a"></i><i class="fx-leak fx-leak--b"></i><i class="fx-leak fx-leak--c"></i>
+      <svg class="fx-aperture" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="0.6"><circle cx="120" cy="120" r="116"/><circle cx="120" cy="120" r="98"/><circle cx="120" cy="120" r="44"/><path d="M120 120 L218.0 120.0"/><path d="M120 120 L189.3 189.3"/><path d="M120 120 L120.0 218.0"/><path d="M120 120 L50.7 189.3"/><path d="M120 120 L22.0 120.0"/><path d="M120 120 L50.7 50.7"/><path d="M120 120 L120.0 22.0"/><path d="M120 120 L189.3 50.7"/></svg>
+      <span class="fx-strip fx-strip--l"></span><span class="fx-strip fx-strip--r"></span>
+      <span class="fx-flare"></span>
+      <span class="fx-scratch" style="--x:9%;--t:9s;--dl:1.2s"></span><span class="fx-scratch" style="--x:31%;--t:13s;--dl:4s"></span><span class="fx-scratch" style="--x:58%;--t:11s;--dl:7s"></span><span class="fx-scratch" style="--x:76%;--t:15s;--dl:2.4s"></span><span class="fx-scratch" style="--x:93%;--t:10s;--dl:5.6s"></span>
+      <span class="fx-vignette"></span>
+    </div>
+    <div class="hero__hud" aria-hidden="true">
+      <span class="crop crop--tl"></span><span class="crop crop--tr"></span><span class="crop crop--bl"></span><span class="crop crop--br"></span>
+      <p class="hud__rec"><i></i>rec <b id="hudTc">00:00:00:00</b></p>
+      <p class="hud__meta">24 fps, 1/48, iso 800, 2.39:1</p>
+    </div>
+
     <div class="inner hero__grid">
       <div class="hero__copy">
-        <p class="eyebrow" data-hero data-reveal><b>N°01</b> Kathmandu · Visual artist &amp; storyteller</p>
+        <p class="eyebrow" data-hero data-reveal><b>N°01</b> <span class="hand">Kathmandu, visual artist &amp; storyteller</span></p>
 
         <h1 class="hero__name">
           <span class="sr-only">Anubhav Khati</span>
@@ -171,8 +200,8 @@
         </h1>
 
         <div class="hero__text">
-          <p class="hero__role" data-hero data-reveal data-d="700">Visual Artist &amp; Visual Storyteller</p>
-          <p class="hero__sub" data-hero data-reveal data-d="780">Art direction · Production design · Photography · Brand visuals</p>
+          <p class="hero__role" data-hero data-reveal data-d="700">Visual Artist <em>&amp;</em> Visual Storyteller</p>
+          <p class="hero__sub" data-hero data-reveal data-d="780">Art direction, production design, photography &amp; brand visuals</p>
           <p class="hero__lede" data-hero data-reveal data-d="860">I turn ideas into images that communicate: social visuals, brand content, physical sets and film. Based in Kathmandu, with a Film Studies eye for framing, colour and story.</p>
 
           <div class="hero__cta" data-hero data-reveal data-d="960">
@@ -184,14 +213,12 @@
             <a href="https://www.instagram.com/anubhavkhati?utm_source=ig_web_button_share_sheet&cplk=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" class="link-u">Instagram</a>
             <a href="https://www.facebook.com/share/19fz3vT4Fn/" target="_blank" rel="noopener noreferrer" class="link-u">Facebook</a>
           </div>
-
-          <p class="hero__now" data-hero data-reveal data-d="1100"><span>Currently at</span>Ministry of Culture, Tourism and Civil Aviation, Government of Nepal</p>
         </div>
       </div>
 
       <figure class="hero__portrait" data-parallax="0.06">
         <div class="frame" data-hero data-reveal="clip" data-d="300">
-          <img src="/assets/images/anubhav-portrait.jpg" alt="Anubhav Khati — portrait" width="820" height="1025" loading="eager" decoding="async" data-img-parallax="0.08" />
+          <img src="/assets/images/anubhav-portrait.jpg" alt="Anubhav Khati — portrait" width="820" height="1025" loading="eager" fetchpriority="high" decoding="async" data-img-parallax="0.08" />
         </div>
         <span class="crop crop--tl" aria-hidden="true"></span><span class="crop crop--tr" aria-hidden="true"></span>
         <span class="crop crop--bl" aria-hidden="true"></span><span class="crop crop--br" aria-hidden="true"></span>
@@ -209,10 +236,10 @@
 
     <div class="inner">
       <ul class="stats" role="list" aria-label="Quick facts">
-        <li data-hero data-reveal data-d="1100"><strong><span data-count="2019" data-from="1990">2019</span></strong><p>creating professionally since</p></li>
-        <li data-hero data-reveal data-d="1180"><strong><span data-count="4">4</span></strong><p>roles across media, brands and production</p></li>
-        <li data-hero data-reveal data-d="1260"><strong><span data-count="2">2</span></strong><p>short films with festival recognition</p></li>
-        <li data-hero data-reveal data-d="1340"><strong><span data-count="3">3</span></strong><p>languages: Nepali, Hindi, English</p></li>
+        <li data-hero data-reveal data-d="1100" style="--led:#ff4b3a"><strong class="led" role="img" aria-label="2019" data-led="2019" data-from="1990" data-cells="4"></strong><p>creating professionally since</p></li>
+        <li data-hero data-reveal data-d="1180" style="--led:#ffa11f"><strong class="led" role="img" aria-label="4" data-led="4" data-cells="2"></strong><p>roles across media, brands and production</p></li>
+        <li data-hero data-reveal data-d="1260" style="--led:#34f58a"><strong class="led" role="img" aria-label="2" data-led="2" data-cells="2"></strong><p>short films with festival recognition</p></li>
+        <li data-hero data-reveal data-d="1340" style="--led:#22d3ff"><strong class="led" role="img" aria-label="3" data-led="3" data-cells="2"></strong><p>languages: Nepali, Hindi, English</p></li>
       </ul>
     </div>
 
@@ -228,6 +255,7 @@
 
   <!-- ══ ABOUT ══ -->
   <section id="about" class="sheet sheet--round about" data-theme="light" data-tone="light" aria-label="About Anubhav">
+    <div class="fx fx--bokeh" aria-hidden="true"><i style="--x:61%;--y:77%;--s:209px;--t:23s;--dl:-16s;--h:var(--gold)"></i><i style="--x:27%;--y:71%;--s:211px;--t:26s;--dl:-19s;--h:var(--gold)"></i><i style="--x:16%;--y:63%;--s:167px;--t:18s;--dl:-2s;--h:var(--rose-hi)"></i><i style="--x:80%;--y:56%;--s:205px;--t:26s;--dl:-19s;--h:var(--gold)"></i><i style="--x:83%;--y:7%;--s:225px;--t:17s;--dl:-1s;--h:var(--rose-hi)"></i><i style="--x:28%;--y:36%;--s:243px;--t:16s;--dl:-14s;--h:var(--teal)"></i><i style="--x:60%;--y:81%;--s:140px;--t:24s;--dl:-7s;--h:var(--teal)"></i><i style="--x:67%;--y:6%;--s:259px;--t:17s;--dl:-14s;--h:var(--teal)"></i><i style="--x:56%;--y:76%;--s:111px;--t:27s;--dl:-8s;--h:var(--teal)"></i></div>
     <div class="inner">
       <div class="about__head">
         <p class="eyebrow" data-reveal><b>01</b> About</p>
@@ -240,21 +268,22 @@
           <p class="about__body" data-reveal>I've designed social posts, banners, covers and promotional content for brands and media, and created physical visual environments too. My Film Studies background shapes how I think about framing, colour and direction.</p>
 
           <ol class="about__list" aria-label="Disciplines">
-            <li data-reveal data-d="0"><span>01</span>Visual art &amp; art direction</li>
-            <li data-reveal data-d="60"><span>02</span>Production design</li>
-            <li data-reveal data-d="120"><span>03</span>Photography</li>
-            <li data-reveal data-d="180"><span>04</span>Social &amp; brand visuals</li>
-            <li data-reveal data-d="240"><span>05</span>Typography &amp; layout</li>
-            <li data-reveal data-d="300"><span>06</span>Film &amp; visual storytelling</li>
+            <li class="draw" data-reveal="row" data-d="0"><span>01</span>Visual art &amp; art direction</li>
+            <li class="draw" data-reveal="row" data-d="60"><span>02</span>Production design</li>
+            <li class="draw" data-reveal="row" data-d="120"><span>03</span>Photography</li>
+            <li class="draw" data-reveal="row" data-d="180"><span>04</span>Social &amp; brand visuals</li>
+            <li class="draw" data-reveal="row" data-d="240"><span>05</span>Typography &amp; layout</li>
+            <li class="draw" data-reveal="row" data-d="300"><span>06</span>Film &amp; visual storytelling</li>
           </ol>
         </div>
 
         <div class="about__aside">
           <figure class="about__photo" data-parallax="0.05">
-            <div class="frame" data-reveal="clip">
+            <div class="frame" data-reveal="clip-x">
               <img src="/assets/images/on-set-directing.jpg" alt="Anubhav directing on set behind the monitor" width="720" height="690" loading="lazy" data-img-parallax="0.1" />
             </div>
-            <figcaption>Directing on set — behind the camera</figcaption>
+            <span class="vf" aria-hidden="true"><i class="vf__c vf__c--tl"></i><i class="vf__c vf__c--tr"></i><i class="vf__c vf__c--bl"></i><i class="vf__c vf__c--br"></i><i class="vf__af"></i><b class="vf__note" data-reveal="fade" data-d="500">keep this one<svg viewBox="0 0 120 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path pathLength="1" d="M4 30 C 30 36, 80 36, 112 8"/><path pathLength="1" d="M100 6 L113 7 L108 19"/></svg></b></span>
+            <figcaption>Directing on set, behind the camera</figcaption>
           </figure>
 
           <aside class="open-card" data-reveal="fade" data-d="150" aria-label="Open to opportunities">
@@ -269,15 +298,17 @@
 
   <!-- ══ EXPERIENCE ══ -->
   <section id="experience" class="sheet sheet--round experience" data-theme="dark" data-tone="dark" aria-label="Work experience">
+    <div class="fx fx--scan" aria-hidden="true"><span class="fx__glow" id="xpGlow"></span><i class="streak" style="--y:18%;--t:17s;--dl:0s"></i><i class="streak" style="--y:47%;--t:23s;--dl:-9s"></i><i class="streak" style="--y:81%;--t:19s;--dl:-4s"></i><span class="fx__edge"></span></div>
     <div class="inner">
       <div class="exp__head">
         <p class="eyebrow" data-reveal><b>02</b> Experience</p>
         <h2 class="title" data-split="words">Four roles, <em>one eye</em></h2>
         <p class="exp__intro" data-reveal data-d="200">From newsroom graphics to a production set. Currently at the Ministry of Culture, Tourism and Civil Aviation, Government of Nepal. <strong>Open a role to read the detail.</strong></p>
+        <p class="exp__note" data-reveal="fade" data-d="600" aria-hidden="true">tap a role<svg viewBox="0 0 90 80" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path pathLength="1" d="M6 8 C 40 4, 78 24, 66 64"/><path pathLength="1" d="M52 54 L66 66 L76 50"/></svg></p>
       </div>
 
       <ol class="xp-list" id="xpList">
-        <li class="xp is-open" data-reveal>
+        <li class="xp draw is-open" data-reveal>
           <h3 class="xp__h"><button class="xp__btn" aria-expanded="true" aria-controls="xp-1" id="xpb-1">
             <span class="xp__no">01</span>
             <span class="xp__co">Ekaa Kombucha</span>
@@ -295,7 +326,7 @@
             </ul>
           </div></div>
         </li>
-        <li class="xp" data-reveal data-d="80">
+        <li class="xp draw" data-reveal data-d="80">
           <h3 class="xp__h"><button class="xp__btn" aria-expanded="false" aria-controls="xp-2" id="xpb-2">
             <span class="xp__no">02</span>
             <span class="xp__co">Chef Nepal</span>
@@ -313,7 +344,7 @@
             </ul>
           </div></div>
         </li>
-        <li class="xp" data-reveal data-d="160">
+        <li class="xp draw" data-reveal data-d="160">
           <h3 class="xp__h"><button class="xp__btn" aria-expanded="false" aria-controls="xp-3" id="xpb-3">
             <span class="xp__no">03</span>
             <span class="xp__co">Synergy Plus</span>
@@ -330,7 +361,7 @@
             </ul>
           </div></div>
         </li>
-        <li class="xp" data-reveal data-d="240">
+        <li class="xp draw" data-reveal data-d="240">
           <h3 class="xp__h"><button class="xp__btn" aria-expanded="false" aria-controls="xp-4" id="xpb-4">
             <span class="xp__no">04</span>
             <span class="xp__co">Kantipur Publications</span>
@@ -356,6 +387,7 @@
   <section id="work" class="work" data-theme="dark" data-tone="dark" aria-label="Selected work">
     <div class="work__pin" id="workPin">
       <div class="work__sticky">
+        <div class="fx fx--beam" aria-hidden="true"><i class="beam"></i><i class="beam beam--b"></i><span class="motes"><i style="--x:50%;--y:33%;--s:3px;--t:9s;--dl:-2s"></i><i style="--x:38%;--y:17%;--s:4px;--t:10s;--dl:-9s"></i><i style="--x:26%;--y:12%;--s:2px;--t:19s;--dl:-0s"></i><i style="--x:15%;--y:30%;--s:2px;--t:16s;--dl:-12s"></i><i style="--x:47%;--y:54%;--s:4px;--t:10s;--dl:-18s"></i><i style="--x:42%;--y:29%;--s:3px;--t:14s;--dl:-2s"></i><i style="--x:21%;--y:46%;--s:2px;--t:15s;--dl:-3s"></i><i style="--x:10%;--y:35%;--s:2px;--t:9s;--dl:-1s"></i><i style="--x:31%;--y:66%;--s:2px;--t:19s;--dl:-17s"></i><i style="--x:14%;--y:61%;--s:2px;--t:20s;--dl:-4s"></i><i style="--x:28%;--y:86%;--s:4px;--t:10s;--dl:-12s"></i><i style="--x:28%;--y:31%;--s:2px;--t:13s;--dl:-18s"></i><i style="--x:21%;--y:6%;--s:2px;--t:11s;--dl:-12s"></i><i style="--x:56%;--y:81%;--s:2px;--t:9s;--dl:-4s"></i><i style="--x:15%;--y:60%;--s:3px;--t:9s;--dl:-10s"></i><i style="--x:55%;--y:41%;--s:4px;--t:10s;--dl:-2s"></i><i style="--x:7%;--y:30%;--s:2px;--t:9s;--dl:-11s"></i><i style="--x:25%;--y:83%;--s:4px;--t:11s;--dl:-18s"></i><i style="--x:32%;--y:77%;--s:2px;--t:15s;--dl:-5s"></i><i style="--x:42%;--y:23%;--s:3px;--t:12s;--dl:-7s"></i><i style="--x:48%;--y:28%;--s:2px;--t:20s;--dl:-17s"></i><i style="--x:14%;--y:91%;--s:4px;--t:16s;--dl:-2s"></i><i style="--x:28%;--y:10%;--s:2px;--t:10s;--dl:-1s"></i><i style="--x:34%;--y:36%;--s:2px;--t:20s;--dl:-12s"></i><i style="--x:18%;--y:57%;--s:4px;--t:13s;--dl:-16s"></i><i style="--x:13%;--y:96%;--s:2px;--t:11s;--dl:-7s"></i></span><span class="fx__edge"></span></div>
         <div class="work__track" id="workTrack">
           <div class="work__intro">
             <p class="eyebrow" data-reveal><b>03</b> Selected Work</p>
@@ -418,6 +450,7 @@
 
   <!-- ══ SKILLS ══ -->
   <section id="skills" class="sheet skills" data-theme="light" data-tone="light" aria-label="Skills and tools">
+    <div class="fx fx--chart" aria-hidden="true"><i class="reg reg--tl"></i><i class="reg reg--tr"></i><i class="reg reg--bl"></i><i class="reg reg--br"></i><span class="focusbar"></span><span class="scanline"></span></div>
     <div class="inner">
       <div class="skills__head">
         <p class="eyebrow" data-reveal><b>04</b> Skills &amp; Tools</p>
@@ -429,31 +462,32 @@
         <div>
           <h3 class="skills__h" data-reveal>Practice</h3>
           <ul class="skills__list" role="list">
-            <li data-reveal><span>01</span>Visual Art</li>
-            <li data-reveal data-d="50"><span>02</span>Visual Storytelling</li>
-            <li data-reveal data-d="100"><span>03</span>Art Direction</li>
-            <li data-reveal data-d="150"><span>04</span>Production Design</li>
-            <li data-reveal data-d="200"><span>05</span>Photography</li>
-            <li data-reveal data-d="250"><span>06</span>Creative Concept Development</li>
-            <li data-reveal data-d="300"><span>07</span>Composition</li>
-            <li data-reveal data-d="350"><span>08</span>Brand Communication</li>
-            <li data-reveal data-d="400"><span>09</span>Social Media Visuals</li>
-            <li data-reveal data-d="450"><span>10</span>Layout</li>
-            <li data-reveal data-d="500"><span>11</span>Typography</li>
-            <li data-reveal data-d="550"><span>12</span>Script Supervision</li>
+            <li class="draw" data-reveal><span>01</span>Visual Art</li>
+            <li class="draw" data-reveal data-d="50"><span>02</span>Visual Storytelling</li>
+            <li class="draw" data-reveal data-d="100"><span>03</span>Art Direction</li>
+            <li class="draw" data-reveal data-d="150"><span>04</span>Production Design</li>
+            <li class="draw" data-reveal data-d="200"><span>05</span>Photography</li>
+            <li class="draw" data-reveal data-d="250"><span>06</span>Creative Concept Development</li>
+            <li class="draw" data-reveal data-d="300"><span>07</span>Composition</li>
+            <li class="draw" data-reveal data-d="350"><span>08</span>Brand Communication</li>
+            <li class="draw" data-reveal data-d="400"><span>09</span>Social Media Visuals</li>
+            <li class="draw" data-reveal data-d="450"><span>10</span>Layout</li>
+            <li class="draw" data-reveal data-d="500"><span>11</span>Typography</li>
+            <li class="draw" data-reveal data-d="550"><span>12</span>Script Supervision</li>
           </ul>
         </div>
         <div>
           <h3 class="skills__h" data-reveal>Tools</h3>
           <ul class="skills__list skills__list--tools" role="list">
-            <li data-reveal><span>A</span>Adobe Photoshop</li>
-            <li data-reveal data-d="60"><span>B</span>Adobe Premiere Pro</li>
-            <li data-reveal data-d="120"><span>C</span>WordPress</li>
-            <li data-reveal data-d="180"><span>D</span>Google Workspace</li>
-            <li data-reveal data-d="240"><span>E</span>Microsoft Office</li>
+            <li class="draw" data-reveal><span>A</span>Adobe Photoshop</li>
+            <li class="draw" data-reveal data-d="60"><span>B</span>Adobe Premiere Pro</li>
+            <li class="draw" data-reveal data-d="120"><span>C</span>WordPress</li>
+            <li class="draw" data-reveal data-d="180"><span>D</span>Google Workspace</li>
+            <li class="draw" data-reveal data-d="240"><span>E</span>Microsoft Office</li>
+            <li class="draw" data-reveal data-d="300"><span>F</span>Canva</li>
           </ul>
-          <div class="skills__seal" aria-hidden="true" data-reveal data-d="300">
-            <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="58"/><circle cx="60" cy="60" r="44"/><path d="M60 14v92M14 60h92"/><circle cx="60" cy="60" r="6"/></svg>
+          <div class="skills__seal" aria-hidden="true" data-reveal data-d="360">
+            <svg viewBox="0 0 120 120" id="irisSvg"><circle cx="60" cy="60" r="58"/><circle cx="60" cy="60" r="50" stroke-dasharray="1 5.2"/><g id="irisBlades"></g><circle id="irisHole" cx="60" cy="60" r="14"/></svg>
           </div>
         </div>
       </div>
@@ -462,6 +496,7 @@
 
   <!-- ══ EDUCATION ══ -->
   <section id="education" class="sheet sheet--round education" data-theme="dark" data-tone="dark" aria-label="Education and recognition">
+    <div class="fx fx--dusk" aria-hidden="true"><i class="burn burn--a"></i><i class="burn burn--b"></i><span class="stars"><i style="--x:62%;--y:72%;--s:3px;--t:7s;--dl:-1s"></i><i style="--x:36%;--y:28%;--s:1px;--t:8s;--dl:-0s"></i><i style="--x:9%;--y:35%;--s:2px;--t:6s;--dl:-3s"></i><i style="--x:8%;--y:6%;--s:1px;--t:5s;--dl:-5s"></i><i style="--x:68%;--y:74%;--s:1px;--t:3s;--dl:-5s"></i><i style="--x:18%;--y:58%;--s:2px;--t:8s;--dl:-8s"></i><i style="--x:75%;--y:18%;--s:3px;--t:3s;--dl:-0s"></i><i style="--x:61%;--y:46%;--s:2px;--t:3s;--dl:-0s"></i><i style="--x:77%;--y:82%;--s:1px;--t:6s;--dl:-1s"></i><i style="--x:94%;--y:40%;--s:2px;--t:4s;--dl:-1s"></i><i style="--x:10%;--y:58%;--s:3px;--t:5s;--dl:-0s"></i><i style="--x:95%;--y:95%;--s:1px;--t:9s;--dl:-5s"></i><i style="--x:46%;--y:11%;--s:2px;--t:3s;--dl:-6s"></i><i style="--x:4%;--y:64%;--s:3px;--t:3s;--dl:-9s"></i><i style="--x:85%;--y:49%;--s:2px;--t:7s;--dl:-0s"></i><i style="--x:78%;--y:10%;--s:1px;--t:3s;--dl:-1s"></i><i style="--x:33%;--y:54%;--s:2px;--t:6s;--dl:-9s"></i><i style="--x:59%;--y:57%;--s:2px;--t:9s;--dl:-8s"></i><i style="--x:11%;--y:67%;--s:3px;--t:3s;--dl:-4s"></i><i style="--x:77%;--y:12%;--s:2px;--t:3s;--dl:-3s"></i><i style="--x:90%;--y:15%;--s:2px;--t:9s;--dl:-9s"></i><i style="--x:85%;--y:63%;--s:2px;--t:3s;--dl:-5s"></i><i style="--x:39%;--y:19%;--s:3px;--t:4s;--dl:-8s"></i><i style="--x:22%;--y:97%;--s:2px;--t:8s;--dl:-7s"></i><i style="--x:64%;--y:31%;--s:2px;--t:6s;--dl:-4s"></i><i style="--x:26%;--y:82%;--s:2px;--t:9s;--dl:-3s"></i><i style="--x:28%;--y:50%;--s:1px;--t:7s;--dl:-5s"></i><i style="--x:27%;--y:18%;--s:1px;--t:6s;--dl:-5s"></i><i style="--x:6%;--y:92%;--s:1px;--t:5s;--dl:-2s"></i><i style="--x:15%;--y:58%;--s:2px;--t:5s;--dl:-3s"></i><i style="--x:53%;--y:49%;--s:3px;--t:6s;--dl:-5s"></i><i style="--x:92%;--y:80%;--s:2px;--t:5s;--dl:-1s"></i><i style="--x:5%;--y:36%;--s:3px;--t:3s;--dl:-4s"></i><i style="--x:74%;--y:46%;--s:2px;--t:8s;--dl:-9s"></i></span><span class="fx__edge"></span></div>
     <div class="inner">
       <div class="edu__head">
         <p class="eyebrow" data-reveal><b>05</b> Education &amp; Recognition</p>
@@ -469,64 +504,83 @@
       </div>
 
       <div class="edu__layout">
-        <ol class="timeline" id="timeline">
-          <span class="timeline__line" aria-hidden="true"><i id="timelineFill"></i></span>
-
-          <li class="tl" data-reveal="left">
-            <p class="tl__year">2022</p>
+        <div class="timeline" id="timeline">
+          <!-- Film-reel rail: sprocket holes advance with scroll, the lit portion follows progress, the playhead reads the year in frame -->
+          <div class="reel" aria-hidden="true">
+            <span class="reel__strip"></span>
+            <span class="reel__strip reel__strip--lit" id="reelLit"></span>
+            <span class="reel__head" id="reelHead"><i></i><b id="reelYear">2022</b></span>
+          </div>
+          <ol class="tl-list">
+          <li class="tl" data-year="2022">
+            <div class="tl__yearcol">
+              <p class="tl__year" data-year-text="2022">2022</p>
+              <p class="tl__frame" aria-hidden="true">frame 01</p>
+            </div>
             <div class="tl__body">
-              <p class="tl__kind">Education</p>
-              <h3>Bachelor's in Film Studies</h3>
-              <p class="tl__meta">Oscar International College, Kathmandu · January 2022 — Present</p>
-              <ul>
+              <p class="tl__kind" data-reveal data-d="120">Education</p>
+              <h3 data-split="words" data-d="60">Bachelor's in Film Studies</h3>
+              <p class="tl__meta" data-reveal data-d="260">Oscar International College, Kathmandu · January 2022 — Present</p>
+              <ul data-reveal data-d="340">
                 <li>Specialization: Screenplay Writing and Direction.</li>
                 <li>Relevant areas: visual storytelling, production design, art direction, visual composition, direction, screenplay writing and narrative development.</li>
               </ul>
             </div>
           </li>
-          <li class="tl" data-reveal="left">
-            <p class="tl__year">2021</p>
+          <li class="tl" data-year="2021">
+            <div class="tl__yearcol">
+              <p class="tl__year" data-year-text="2021">2021</p>
+              <p class="tl__frame" aria-hidden="true">frame 02</p>
+            </div>
             <div class="tl__body">
-              <p class="tl__kind">Education</p>
-              <h3>+2 Management</h3>
-              <p class="tl__meta">Lincoln College, Kathmandu · March 2021</p>
-              <ul>
+              <p class="tl__kind" data-reveal data-d="120">Education</p>
+              <h3 data-split="words" data-d="60">+2 Management</h3>
+              <p class="tl__meta" data-reveal data-d="260">Lincoln College, Kathmandu · March 2021</p>
+              <ul data-reveal data-d="340">
                 <li>GPA: 2.68</li>
                 <li>Focus on business, communication, and visual management foundations.</li>
               </ul>
             </div>
           </li>
-          <li class="tl" data-reveal="left">
-            <p class="tl__year">2023</p>
+          <li class="tl" data-year="2023">
+            <div class="tl__yearcol">
+              <p class="tl__year" data-year-text="2023">2023</p>
+              <p class="tl__frame" aria-hidden="true">frame 03</p>
+            </div>
             <div class="tl__body">
-              <p class="tl__kind">Recognition</p>
-              <h3>Aavritti: Official Selection</h3>
-              <p class="tl__meta">Nepal International Film Festival · Directed by Anubhav Khati · NIFF 2023</p>
-              <ul>
+              <p class="tl__kind" data-reveal data-d="120">Recognition</p>
+              <h3 data-split="words" data-d="60">Aavritti: Official Selection</h3>
+              <p class="tl__meta" data-reveal data-d="260">Nepal International Film Festival · Directed by Anubhav Khati · NIFF 2023</p>
+              <ul data-reveal data-d="340">
                 <li>Featured at Nepal International Film Festival 2023.</li>
                 <li>Screened at QFX Labim Mall, Lalitpur.</li>
               </ul>
             </div>
           </li>
-          <li class="tl" data-reveal="left">
-            <p class="tl__year">2023</p>
+          <li class="tl" data-year="2023">
+            <div class="tl__yearcol">
+              <p class="tl__year" data-year-text="2023">2023</p>
+              <p class="tl__frame" aria-hidden="true">frame 04</p>
+            </div>
             <div class="tl__body">
-              <p class="tl__kind">Recognition</p>
-              <h3>Ananta &amp; Aavritti: Festival Honors</h3>
-              <p class="tl__meta">Student World IFF, UK · International Recognition · 2022–2023</p>
-              <ul>
+              <p class="tl__kind" data-reveal data-d="120">Recognition</p>
+              <h3 data-split="words" data-d="60">Ananta &amp; Aavritti: Festival Honors</h3>
+              <p class="tl__meta" data-reveal data-d="260">Student World IFF, UK · International Recognition · 2022–2023</p>
+              <ul data-reveal data-d="340">
                 <li>Ananta: Special Mention at Student World International Film Festival, UK.</li>
                 <li>Aavritti: Honorable Mention at Student World Impact Film Festival (out of 5,000+ entries from 100 countries).</li>
               </ul>
             </div>
           </li>
-        </ol>
+          </ol>
+        </div>
 
         <figure class="edu__award">
           <div class="frame" data-reveal="clip">
             <img src="/assets/images/award-aavritti.jpg" alt="Honorable Mention certificate for Aavritti, Student World Impact Film Festival" width="540" height="660" loading="lazy" data-img-parallax="0.08" />
           </div>
-          <figcaption>Honorable Mention · Student World Impact Film Festival</figcaption>
+          <div class="edu__count" aria-hidden="true"><b id="eduNo">01</b><span>/ 04</span></div>
+          <figcaption>Honorable Mention, Student World Impact Film Festival</figcaption>
         </figure>
       </div>
     </div>
@@ -534,23 +588,82 @@
 
   <!-- ══ INTERESTS ══ -->
   <section id="interests" class="sheet sheet--round interests" data-theme="light" data-tone="light" aria-label="Interests">
+    <div class="fx fx--wash" aria-hidden="true"><i style="--c:var(--lavender);--x:78%;--y:18%;--s:46vmax;--t:27s"></i><i style="--c:var(--rose-hi);--x:12%;--y:62%;--s:38vmax;--t:33s"></i><i style="--c:var(--gold);--x:62%;--y:88%;--s:34vmax;--t:24s"></i><i style="--c:var(--teal);--x:30%;--y:8%;--s:26vmax;--t:30s"></i></div>
     <div class="inner">
       <div class="int__head">
         <p class="eyebrow" data-reveal><b>06</b> Off the Clock</p>
         <h2 class="title" data-split="words">What I keep <em>coming back to</em></h2>
       </div>
-      <ul class="int-list" role="list">
-        <li class="int" tabindex="0" data-reveal><span class="int__no">01</span><span class="int__word">Photography</span><span class="int__arrow" aria-hidden="true"><svg class="icon"><use href="#i-up-right"/></svg></span></li>
-        <li class="int" tabindex="0" data-reveal data-d="60"><span class="int__no">02</span><span class="int__word">Film &amp; Cinema</span><span class="int__arrow" aria-hidden="true"><svg class="icon"><use href="#i-up-right"/></svg></span></li>
-        <li class="int" tabindex="0" data-reveal data-d="120"><span class="int__no">03</span><span class="int__word">Visual Arts</span><span class="int__arrow" aria-hidden="true"><svg class="icon"><use href="#i-up-right"/></svg></span></li>
-        <li class="int" tabindex="0" data-reveal data-d="180"><span class="int__no">04</span><span class="int__word">Poetry</span><span class="int__arrow" aria-hidden="true"><svg class="icon"><use href="#i-up-right"/></svg></span></li>
-        <li class="int" tabindex="0" data-reveal data-d="240"><span class="int__no">05</span><span class="int__word">Storytelling</span><span class="int__arrow" aria-hidden="true"><svg class="icon"><use href="#i-up-right"/></svg></span></li>
-      </ul>
+      <div class="int-wrap">
+        <ul class="int-list" role="list">
+        <li class="int draw" tabindex="0" data-reveal data-k="photo">
+          <span class="int__no">01</span>
+          <div class="int__main">
+            <span class="int__word">Photography</span>
+            <div class="int__more"><div class="int__more-in">
+              <p class="int__desc">Light, framing and the quiet second before the shutter.</p>
+              <ul class="int__tags" aria-hidden="true"><li>Light</li><li>Frame</li><li>Moment</li></ul>
+            </div></div>
+          </div>
+          <span class="int__arrow" aria-hidden="true"><svg class="icon"><use href="#i-up-right"/></svg></span>
+        </li>
+        <li class="int draw" tabindex="0" data-reveal data-d="60" data-k="film">
+          <span class="int__no">02</span>
+          <div class="int__main">
+            <span class="int__word">Film &amp; Cinema</span>
+            <div class="int__more"><div class="int__more-in">
+              <p class="int__desc">Where framing, colour and time learn to tell a story.</p>
+              <ul class="int__tags" aria-hidden="true"><li>Direction</li><li>Colour</li><li>Cut</li></ul>
+            </div></div>
+          </div>
+          <span class="int__arrow" aria-hidden="true"><svg class="icon"><use href="#i-up-right"/></svg></span>
+        </li>
+        <li class="int draw" tabindex="0" data-reveal data-d="120" data-k="art">
+          <span class="int__no">03</span>
+          <div class="int__main">
+            <span class="int__word">Visual Arts</span>
+            <div class="int__more"><div class="int__more-in">
+              <p class="int__desc">Shape, texture and colour, with nothing to explain.</p>
+              <ul class="int__tags" aria-hidden="true"><li>Form</li><li>Texture</li><li>Palette</li></ul>
+            </div></div>
+          </div>
+          <span class="int__arrow" aria-hidden="true"><svg class="icon"><use href="#i-up-right"/></svg></span>
+        </li>
+        <li class="int draw" tabindex="0" data-reveal data-d="180" data-k="poetry">
+          <span class="int__no">04</span>
+          <div class="int__main">
+            <span class="int__word">Poetry</span>
+            <div class="int__more"><div class="int__more-in">
+              <p class="int__desc">Small words, long echoes. Rhythm before everything else.</p>
+              <ul class="int__tags" aria-hidden="true"><li>Rhythm</li><li>Image</li><li>Silence</li></ul>
+            </div></div>
+          </div>
+          <span class="int__arrow" aria-hidden="true"><svg class="icon"><use href="#i-up-right"/></svg></span>
+        </li>
+        <li class="int draw" tabindex="0" data-reveal data-d="240" data-k="story">
+          <span class="int__no">05</span>
+          <div class="int__main">
+            <span class="int__word">Storytelling</span>
+            <div class="int__more"><div class="int__more-in">
+              <p class="int__desc">The beat before it turns. Every idea needs an arc.</p>
+              <ul class="int__tags" aria-hidden="true"><li>Arc</li><li>Character</li><li>Turn</li></ul>
+            </div></div>
+          </div>
+          <span class="int__arrow" aria-hidden="true"><svg class="icon"><use href="#i-up-right"/></svg></span>
+        </li>
+        </ul>
+        <aside class="int-stage" aria-hidden="true" data-reveal="fade" data-d="200">
+          <div class="int-stage__ring"></div>
+          <div class="int-stage__art"><svg class="art art--photo" data-k="photo" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><g class="spin"><circle pathLength="1" cx="120" cy="120" r="100"/><circle pathLength="1" cx="120" cy="120" r="78"/><path pathLength="1" d="M120 120 L198.0 120.0"/><path pathLength="1" d="M120 120 L159.0 187.5"/><path pathLength="1" d="M120 120 L81.0 187.5"/><path pathLength="1" d="M120 120 L42.0 120.0"/><path pathLength="1" d="M120 120 L81.0 52.5"/><path pathLength="1" d="M120 120 L159.0 52.5"/><circle pathLength="1" cx="120" cy="120" r="30"/></g><circle class="dot" cx="120" cy="120" r="3.5" fill="currentColor" stroke="none"/></svg><svg class="art art--film" data-k="film" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><rect pathLength="1" x="30" y="54" width="180" height="132" rx="6"/><rect pathLength="1" x="54" y="78" width="132" height="84" rx="2"/><path pathLength="1" d="M108 100 L140 120 L108 140 Z"/><rect pathLength="1" x="38" y="62" width="9" height="8" rx="1.5"/><rect pathLength="1" x="38" y="170" width="9" height="8" rx="1.5"/><rect pathLength="1" x="59" y="62" width="9" height="8" rx="1.5"/><rect pathLength="1" x="59" y="170" width="9" height="8" rx="1.5"/><rect pathLength="1" x="80" y="62" width="9" height="8" rx="1.5"/><rect pathLength="1" x="80" y="170" width="9" height="8" rx="1.5"/><rect pathLength="1" x="101" y="62" width="9" height="8" rx="1.5"/><rect pathLength="1" x="101" y="170" width="9" height="8" rx="1.5"/><rect pathLength="1" x="122" y="62" width="9" height="8" rx="1.5"/><rect pathLength="1" x="122" y="170" width="9" height="8" rx="1.5"/><rect pathLength="1" x="143" y="62" width="9" height="8" rx="1.5"/><rect pathLength="1" x="143" y="170" width="9" height="8" rx="1.5"/><rect pathLength="1" x="164" y="62" width="9" height="8" rx="1.5"/><rect pathLength="1" x="164" y="170" width="9" height="8" rx="1.5"/><rect pathLength="1" x="185" y="62" width="9" height="8" rx="1.5"/><rect pathLength="1" x="185" y="170" width="9" height="8" rx="1.5"/></svg><svg class="art art--art" data-k="art" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle pathLength="1" cx="96" cy="100" r="58"/><circle pathLength="1" cx="144" cy="100" r="58"/><circle pathLength="1" cx="120" cy="142" r="58"/><path class="accent" pathLength="1" d="M28 206 C 70 178, 96 222, 128 196 S 186 176, 214 204"/></svg><svg class="art art--poetry" data-k="poetry" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M48 62 H176"/><path pathLength="1" d="M48 92 H150"/><path pathLength="1" d="M48 122 H192"/><path pathLength="1" d="M48 152 H128"/><path pathLength="1" d="M48 182 H168"/><path class="accent" pathLength="1" d="M200 56 C 206 84, 206 130, 190 196 L 184 206 L 196 198 C 206 150, 212 100, 200 56 Z"/></svg><svg class="art art--story" data-k="story" viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M24 196 H216"/><path class="accent" pathLength="1" d="M24 188 C 60 184, 76 150, 104 128 S 140 52, 156 52 S 184 150, 216 176"/><circle class="dot" cx="24" cy="188" r="4" fill="currentColor" stroke="none"/><circle class="dot" cx="104" cy="128" r="4" fill="currentColor" stroke="none"/><circle class="dot" cx="156" cy="52" r="5" fill="currentColor" stroke="none"/><circle class="dot" cx="216" cy="176" r="4" fill="currentColor" stroke="none"/></svg></div>
+          <p class="int-stage__cap"><b id="intNo">01</b><span id="intName">Photography</span></p>
+        </aside>
+      </div>
     </div>
   </section>
 
   <!-- ══ CONTACT ══ -->
   <section id="contact" class="sheet sheet--round contact" data-theme="dark" data-tone="dark" aria-label="Contact">
+    <div class="fx fx--sun" aria-hidden="true"><i class="sun"></i><i class="streak" style="--y:30%;--t:21s;--dl:-3s"></i><i class="streak" style="--y:68%;--t:26s;--dl:-13s"></i></div>
     <div class="contact__glow" id="contactGlow" aria-hidden="true"></div>
     <div class="contact__frame" aria-hidden="true"><span class="crop crop--tl"></span><span class="crop crop--tr"></span><span class="crop crop--bl"></span><span class="crop crop--br"></span></div>
     <div class="inner contact__inner">
@@ -580,45 +693,91 @@
           <a href="https://www.facebook.com/share/19fz3vT4Fn/" target="_blank" rel="noopener noreferrer" class="link-u">Facebook</a>
         </li>
       </ul>
+      <div class="clap" id="clap" role="img" aria-label="A film clapperboard: scene 07, the next frame, directed by Anubhav Khati">
+        <div class="clap__top" id="clapTop"><span class="clap__hinge"></span></div>
+        <div class="clap__board">
+          <div class="clap__stripe"></div>
+          <dl class="clap__rows">
+            <div><dt>scene</dt><dd>07, the next frame</dd></div>
+            <div><dt>take</dt><dd id="clapTake">1</dd></div>
+            <div><dt>director</dt><dd>Anubhav Khati</dd></div>
+            <div><dt>shot in</dt><dd>Kathmandu</dd></div>
+            <div><dt>date</dt><dd id="clapDate">today</dd></div>
+          </dl>
+          <p class="clap__hint">click for another take</p>
+        </div>
+      </div>
     </div>
   </section>
 
 </main>
 
-<!-- ══ FOOTER ══ -->
-<footer class="footer" data-theme="dark" role="contentinfo">
-  <div class="inner">
-    <p class="footer__mark" aria-hidden="true">Anubhav <em>Khati</em></p>
-    <div class="footer__cols">
-      <div>
-        <p class="footer__brand">Anubhav Khati</p>
-        <p class="footer__tag">Visual artist and visual storyteller, Kathmandu.</p>
+<!-- ══ FOOTER: the end credits ══ -->
+<footer class="footer" id="footer" data-theme="dark" role="contentinfo">
+  <div class="footer__fx" aria-hidden="true">
+    <i class="footer__beam"></i><i class="footer__beam footer__beam--b"></i>
+    <span class="footer__dust"><i style="--x:83%;--s:3px;--t:21s;--dl:-11s"></i><i style="--x:92%;--s:2px;--t:17s;--dl:-7s"></i><i style="--x:87%;--s:2px;--t:12s;--dl:-3s"></i><i style="--x:51%;--s:4px;--t:13s;--dl:-12s"></i><i style="--x:73%;--s:2px;--t:19s;--dl:-7s"></i><i style="--x:5%;--s:2px;--t:16s;--dl:-8s"></i><i style="--x:27%;--s:4px;--t:12s;--dl:-2s"></i><i style="--x:21%;--s:4px;--t:12s;--dl:-4s"></i><i style="--x:4%;--s:2px;--t:13s;--dl:-6s"></i><i style="--x:25%;--s:2px;--t:14s;--dl:-10s"></i><i style="--x:29%;--s:2px;--t:12s;--dl:-6s"></i><i style="--x:53%;--s:3px;--t:10s;--dl:-11s"></i><i style="--x:57%;--s:2px;--t:12s;--dl:-8s"></i><i style="--x:12%;--s:3px;--t:14s;--dl:-19s"></i><i style="--x:79%;--s:2px;--t:19s;--dl:-10s"></i><i style="--x:12%;--s:3px;--t:15s;--dl:-9s"></i><i style="--x:65%;--s:3px;--t:12s;--dl:-15s"></i><i style="--x:64%;--s:2px;--t:10s;--dl:-8s"></i><i style="--x:6%;--s:3px;--t:16s;--dl:-0s"></i><i style="--x:74%;--s:4px;--t:15s;--dl:-12s"></i><i style="--x:78%;--s:2px;--t:17s;--dl:-1s"></i><i style="--x:94%;--s:2px;--t:19s;--dl:-6s"></i></span>
+  </div>
+  <div class="inner footer__inner">
+    <div class="footer__card" data-reveal="fade" aria-hidden="true">
+      <p class="footer__tbc"><span lang="ne">क्रमशः</span><em>to be continued…</em></p>
+      <span class="footer__rule"></span>
+    </div>
+
+    <div class="footer__markwrap" id="footerMarkWrap" data-reveal="clip" aria-hidden="true">
+      <p class="footer__mark" id="footerMark"><span>Anubhav <em>Khati</em></span></p>
+      <p class="footer__mark footer__mark--lit" id="footerMarkLit"><span>Anubhav <em>Khati</em></span></p>
+      <span class="footer__hint">move your light across the name</span>
+    </div>
+
+    <div class="footer__stage">
+      <div class="screen" id="screen">
+        <div class="screen__strip screen__strip--l"></div><div class="screen__strip screen__strip--r"></div>
+        <div class="screen__gate" aria-label="End credits">
+          <ul class="credits" id="credits">
+            <li class="credits__title"><em>closing credits</em></li>
+            <li><span>Directed by</span><b>Anubhav Khati</b></li><li><span>Short films</span><b>Aavritti, Ananta, Sanyati</b></li><li><span>Official selection</span><b>Nepal International Film Festival 2023</b></li><li><span>Honorable mention</span><b>Student World Impact Film Festival</b></li><li><span>Special mention</span><b>Student World International Film Festival, UK</b></li><li><span>Visual art &amp; art direction</span><b>Anubhav Khati</b></li><li><span>Brand visuals for</span><b>Ekaa Kombucha</b></li><li><span>Production design for</span><b>Chef Nepal</b></li><li><span>Content created for</span><b>Synergy Plus</b></li><li><span>Social &amp; editorial for</span><b>Kantipur Publications</b></li><li><span>Currently with</span><b>Ministry of Culture, Tourism and Civil Aviation, Government of Nepal</b></li><li><span>Studied at</span><b>Oscar International College, Lincoln College</b></li><li><span>Tools</span><b>Adobe Photoshop, Adobe Premiere Pro, Canva</b></li><li><span>Languages</span><b>Nepali, Hindi, English</b></li><li><span>Shot on location</span><b>Kathmandu, Nepal</b></li>
+            <li class="credits__title credits__title--end"><em>thank you for watching</em></li>
+          </ul>
+        </div>
+        <p class="screen__cap" aria-hidden="true"><span id="screenTc">00:00:00</span><span>hover to pause the roll</span></p>
       </div>
-      <div class="footer__col">
-        <h4>Navigate</h4>
-        <ul>
-          <li><a href="#about">About</a></li>
-          <li><a href="#experience">Experience</a></li>
-          <li><a href="#work">Work</a></li>
-          <li><a href="#skills">Skills</a></li>
-        </ul>
-      </div>
-      <div class="footer__col">
-        <h4>Contact</h4>
-        <ul>
-          <li><a href="mailto:anubhavkhati@gmail.com">anubhavkhati@gmail.com</a></li>
-          <li><a href="tel:+9779846819030">+977 9846819030</a></li>
-          <li><a href="https://www.instagram.com/anubhavkhati?utm_source=ig_web_button_share_sheet&cplk=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-          <li><a href="https://www.facebook.com/share/19fz3vT4Fn/" target="_blank" rel="noopener noreferrer">Facebook</a></li>
-          <li><a href="https://www.linkedin.com/in/anubhavkhati-a358a2249" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-          <li><a href="https://filmfreeway.com/anubhavkhati" target="_blank" rel="noopener noreferrer">FilmFreeway</a></li>
-          <li><a href="/assets/Anubhav_Khati_Visual_Artist_CV.pdf" download>Download CV</a></li>
-        </ul>
+
+      <div class="footer__cols">
+        <div class="footer__who">
+          <p class="footer__brand">Anubhav Khati</p>
+          <p class="footer__tag">Visual artist and visual storyteller, Kathmandu.</p>
+          <p class="footer__clock" id="npClock" aria-hidden="true"><i></i><span>Kathmandu</span> <b>--:--</b></p>
+        </div>
+        <div class="footer__col">
+          <h4>Navigate</h4>
+          <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#work">Work</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#interests">Interests</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="mailto:anubhavkhati@gmail.com">anubhavkhati@gmail.com</a></li>
+            <li><a href="tel:+9779846819030">+977 9846819030</a></li>
+            <li><a href="https://www.instagram.com/anubhavkhati?utm_source=ig_web_button_share_sheet&cplk=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+            <li><a href="https://www.facebook.com/share/19fz3vT4Fn/" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+            <li><a href="https://www.linkedin.com/in/anubhavkhati-a358a2249" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+            <li><a href="https://filmfreeway.com/anubhavkhati" target="_blank" rel="noopener noreferrer">FilmFreeway</a></li>
+            <li><a href="/assets/Anubhav_Khati_Visual_Artist_CV.pdf" download>Download CV</a></li>
+          </ul>
+        </div>
       </div>
     </div>
+
     <div class="footer__bottom">
-      <p>© 2026 Anubhav Khati. All rights reserved.</p>
-      <span>Kathmandu, Nepal</span>
+      <p class="footer__made"><span class="made">made with</span> <b class="maya">dherai dherai maya</b> <span class="heart" role="img" aria-label="red heart">❤️</span></p>
+      <span class="footer__loc">Kathmandu, Nepal</span>
     </div>
   </div>
 </footer>
