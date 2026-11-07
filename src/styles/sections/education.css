@@ -1,0 +1,123 @@
+/* education.css — "The Reel": a film-strip timeline.
+   Sprocket holes run down the left and advance as you scroll (film through a gate); the lit part follows your
+   progress; a viewfinder window rides the strip reading the year in frame. Each entry is a numbered frame:
+   its year rolls in like an odometer, its title rises from a mask, and the frame under the playhead lights up.
+   Driven by education.js (--p, --roll, .is-active). */
+.edu__head { display: grid; gap: 28px; max-width: 1100px; }
+.edu__layout { margin-top: clamp(56px, 8vw, 112px); display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(16px, 2.4vw, 40px); align-items: start; }
+
+.timeline {
+  --pad: clamp(56px, 6.6vw, 96px);
+  --reel-w: clamp(22px, 2.3vw, 30px);
+  position: relative; grid-column: 1 / span 7; padding-left: var(--pad);
+}
+.tl-list { display: grid; gap: clamp(56px, 7vw, 96px); }
+
+/* ── The reel ── */
+.reel { position: absolute; left: 0; top: 0; bottom: 0; width: var(--reel-w); --p: 0; --roll: 0px; }
+.reel::before, .reel::after { content: ''; position: absolute; top: 0; bottom: 0; width: 1px; background: var(--hair-on-dark); }
+.reel::before { left: 0; } .reel::after { right: 0; }
+.reel__strip {
+  position: absolute; inset: 0; background: var(--hair-on-dark);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 26' preserveAspectRatio='none'%3E%3Crect x='7.5' y='7.5' width='13' height='11' rx='2.4' fill='none' stroke='black' stroke-width='1.4'/%3E%3C/svg%3E") 0 var(--roll) / 100% 26px repeat-y;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 26' preserveAspectRatio='none'%3E%3Crect x='7.5' y='7.5' width='13' height='11' rx='2.4' fill='none' stroke='black' stroke-width='1.4'/%3E%3C/svg%3E") 0 var(--roll) / 100% 26px repeat-y;
+}
+.reel__strip--lit {
+  background: linear-gradient(to bottom, var(--accent), color-mix(in srgb, var(--accent) 55%, var(--ivory)));
+  clip-path: inset(0 0 calc((1 - var(--p)) * 100%) 0);
+}
+.reel__head {
+  position: absolute; left: -8px; width: calc(var(--reel-w) + 16px); height: 40px; top: calc(var(--p) * 100%);
+  transform: translateY(-50%); display: grid; place-items: center;
+  border: 1px solid var(--accent); border-radius: 3px; background: color-mix(in srgb, var(--bg) 82%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent), 0 0 28px color-mix(in srgb, var(--accent) 34%, transparent);
+}
+.reel__head b { font-family: var(--f-label); font-weight: 500; font-size: 9px; letter-spacing: 0.02em; color: var(--accent); font-variant-numeric: tabular-nums; transition: transform 0.5s var(--ease-out), opacity 0.4s; }
+.reel__head i { position: absolute; right: -4px; top: 50%; width: 7px; height: 7px; margin-top: -3.5px; background: var(--accent); border-radius: 50%; }
+.reel__head i::after { content: ''; position: absolute; inset: -5px; border: 1px solid var(--accent); border-radius: 50%; opacity: 0; animation: reel-ping 2.4s var(--ease-out) infinite; }
+@keyframes reel-ping { 0% { transform: scale(0.4); opacity: 0.8; } 80%, 100% { transform: scale(1.6); opacity: 0; } }
+
+/* ── A frame (one entry) ── */
+.tl { position: relative; display: grid; grid-template-columns: minmax(104px, 156px) minmax(0, 1fr); gap: clamp(16px, 3vw, 40px); isolation: isolate; }
+.tl::before { content: ''; position: absolute; top: clamp(34px, 3vw, 46px); height: 1px; left: calc((var(--pad) - var(--reel-w) - 10px) * -1); width: calc(var(--pad) - var(--reel-w) - 20px); background: var(--accent); opacity: 0.7; transform-origin: left; }
+.tl::after { content: ''; position: absolute; top: calc(clamp(34px, 3vw, 46px) - 3px); left: -14px; width: 7px; height: 7px; background: var(--bg); border: 1px solid var(--accent); transform: rotate(45deg); transition: background-color 0.5s, transform 0.6s var(--ease-out); }
+html.js .tl::before { transform: scaleX(0); transition: transform 1s var(--ease-io) 0.1s; }
+html.js .tl.is-in::before { transform: scaleX(1); }
+
+.tl__wash { position: absolute; z-index: -1; inset: -22px -18px -22px -10px; border-radius: 6px; pointer-events: none;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 15%, transparent), transparent 78%);
+  border-left: 1px solid color-mix(in srgb, var(--accent) 70%, transparent);
+  opacity: 0; clip-path: inset(0 100% 0 0); transition: opacity 0.6s var(--ease-out), clip-path 1s var(--ease-io); }
+
+.tl__yearcol { display: grid; align-content: start; gap: 10px; }
+.tl__year { display: flex; font-family: var(--f-display); font-weight: 300; font-size: clamp(2.8rem, 5vw, 5rem); line-height: 1; color: transparent; -webkit-text-stroke: 1px var(--accent); transition: color 0.8s var(--ease-out); }
+.dg { display: block; width: 0.46em; height: 1.04em; overflow: hidden; text-align: center; }
+.dg__col { display: flex; flex-direction: column; transform: translate3d(0, 0, 0); transition: transform 1.5s var(--ease-out) calc(var(--k, 0) * 130ms + 150ms); }
+.dg__col span { display: block; height: 1.04em; line-height: 1.04; }
+.tl.is-in .dg__col { transform: translate3d(0, calc(var(--n, 0) * -1.04em), 0); }
+.tl__frame { font-family: var(--f-label); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-on-dark); display: flex; align-items: center; gap: 10px; }
+.tl__frame::before { content: ''; width: 18px; height: 1px; background: currentColor; opacity: 0.5; transition: width 0.8s var(--ease-out), background-color 0.4s; }
+
+.tl__kind { font-family: var(--f-script); font-style: italic; font-size: var(--script-size); font-weight: 500; color: var(--accent); }
+.tl h3 { margin-top: 8px; font-size: clamp(1.8rem, 2.8vw, 2.7rem); line-height: 1.05; font-weight: 400; }
+.tl__meta { margin-top: 10px; font-size: 14px; color: var(--text-on-dark); opacity: 0.85; }
+.tl ul { margin-top: 16px; display: grid; gap: 8px; }
+.tl ul li { position: relative; padding-left: 22px; color: var(--text-on-dark); font-size: 15.5px; }
+.tl ul li::before { content: ''; position: absolute; left: 0; top: 0.85em; width: 10px; height: 1px; background: var(--accent); transition: width 0.7s var(--ease-out); }
+
+
+/* ── Award frame ── */
+.edu__award { grid-column: 9 / span 4; position: sticky; top: calc(var(--header-h) + 44px); }
+.edu__award .frame { aspect-ratio: 4 / 5; overflow: hidden; background: var(--surface); }
+.edu__award::before { content: ''; position: absolute; inset: 18px -18px -18px 18px; border: 1px solid var(--accent); opacity: 0.45; z-index: -1; }
+.edu__award figcaption { margin-top: 36px; font-family: var(--f-label); font-size: var(--label-size); letter-spacing: var(--label-track); color: var(--text-on-dark); }
+.edu__count { position: absolute; top: -30px; right: 0; display: flex; align-items: baseline; gap: 8px; font-family: var(--f-label); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-on-dark); }
+.edu__count::before { content: 'Frame'; }
+.edu__count b { font-family: var(--f-display); font-weight: 400; font-size: 1.9rem; letter-spacing: 0; line-height: 0.8; color: var(--accent); display: inline-block; transition: transform 0.6s var(--ease-out), opacity 0.4s; }
+
+@media (max-width: 1000px) {
+  .timeline, .edu__award { grid-column: 1 / -1; }
+  .edu__award { position: relative; top: 0; margin: 80px 18px 0 0; max-width: 460px; }
+}
+@media (max-width: 560px) {
+  .timeline { --pad: 44px; --reel-w: 18px; }
+  .tl { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .tl__yearcol { grid-auto-flow: column; justify-content: start; align-items: end; gap: 16px; }
+  .tl__year { font-size: 3rem; }
+  .reel__head { height: 34px; }
+  .tl__wash { inset: -16px -10px -16px -8px; }
+}
+
+/* years stay hidden until their frame enters, so the odometer never shows its 0000 start */
+html.js .tl:not(.is-in) .tl__year { opacity: 0; }
+.tl__year { transition: color 0.8s var(--ease-out), opacity 0.4s; }
+
+
+/* ═════════ Smooth edition ═════════
+   education.js now damps everything: each frame carries a continuous focus value --f (0 → 1) that eases toward its target
+   every animation frame, so nothing snaps between "active" and "inactive". The CSS below only reads --f. */
+.tl { --f: 0; opacity: calc(0.52 + var(--f) * 0.48); }
+.tl::after { background: color-mix(in srgb, var(--accent) calc(var(--f) * 100%), var(--bg)); transform: rotate(45deg) scale(calc(1 + var(--f) * 0.55)); transition: none; }
+.tl__wash { opacity: var(--f); clip-path: inset(0 calc((1 - var(--f)) * 100%) 0 0); transition: none; }
+.tl__year { color: color-mix(in srgb, var(--accent) calc(var(--f) * 100%), transparent); transition: opacity 0.6s var(--ease-out); }
+.tl:hover .tl__year { color: color-mix(in srgb, var(--accent) calc(max(var(--f), 0.6) * 100%), transparent); }
+.tl__body { translate: calc(var(--f) * 12px) 0; }
+.tl__frame { color: color-mix(in srgb, var(--accent) calc(var(--f) * 100%), var(--text-on-dark)); }
+.tl__frame::before { width: calc(18px + var(--f) * 18px); background: color-mix(in srgb, var(--accent) calc(var(--f) * 100%), currentColor); opacity: calc(0.5 + var(--f) * 0.5); transition: none; }
+.tl ul li::before { width: calc(10px + var(--f) * 8px); transition: none; }
+.tl h3 { letter-spacing: calc(var(--f) * 0.004em); }
+
+/* the year / frame readouts are slot columns that glide, instead of text that swaps */
+.slot { --h: 1em; display: inline-block; height: var(--h); overflow: hidden; line-height: var(--h); vertical-align: bottom; }
+.slot__col { display: flex; flex-direction: column; transform: translate3d(0, calc(var(--i, 0) * var(--h) * -1), 0); transition: transform 1.25s var(--ease-out); will-change: transform; }
+.slot__col span { display: block; height: var(--h); line-height: var(--h); text-align: center; }
+.reel__head b { --h: 1.35em; transition: none; }
+.edu__count b { --h: 1em; line-height: 1; transition: none; }
+.edu__count b.slot { height: 1em; }
+.dg__col { transition-duration: 2.4s; transition-timing-function: cubic-bezier(0.16, 0.84, 0.24, 1); }
+
+/* ═════════ The award gate: a still held in the projector ═════════ */
+.edu__award .frame::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 2; mix-blend-mode: soft-light;
+  background: radial-gradient(120% 90% at 30% 20%, rgba(255, 220, 160, 0.34), transparent 60%), linear-gradient(180deg, transparent 60%, rgba(30, 24, 86, 0.5)); animation: gate-flick 7s steps(1, end) infinite; }
+@keyframes gate-flick { 0%, 100% { opacity: 1; } 22% { opacity: 0.8; } 23% { opacity: 1; } 61% { opacity: 0.88; } 62% { opacity: 1; } }
+.edu__award figcaption { margin-top: 56px; }

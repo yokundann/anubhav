@@ -1,0 +1,73 @@
+/* work.css — stacked by default; becomes a pinned horizontal gallery when JS adds .is-pinned */
+.work { position: relative; padding-block: var(--section-pad) calc(var(--section-pad) * 0.7); border-radius: var(--radius-sheet) var(--radius-sheet) 0 0; margin-top: calc(var(--radius-sheet) * -1); z-index: 2; }
+.work__sticky { position: relative; }
+.work__track { display: flex; flex-direction: column; gap: clamp(56px, 9vw, 96px); padding-inline: var(--gutter); max-width: var(--max); margin-inline: auto; }
+
+.work__intro { display: grid; gap: 28px; max-width: 760px; }
+.work__lede { max-width: 46ch; color: var(--text-on-dark); }
+.work__lede strong { color: var(--ivory); font-weight: 500; }
+.work__hint, .work__meter { display: none; }
+
+.film { position: relative; display: grid; gap: 22px; outline: none; }
+.film__img { position: relative; overflow: hidden; background: var(--surface); max-width: 520px; }
+.film--b { margin-left: auto; }
+.film__img img { width: 100%; height: auto; transition: transform 1.6s var(--ease-hover), filter 1s var(--ease-hover); filter: saturate(0.95); }
+.film__img::after { content: ''; position: absolute; inset: 10px; border: 1px solid var(--accent); opacity: 0; transform: scale(1.04); transition: opacity 0.6s var(--ease-out), transform 0.8s var(--ease-out); pointer-events: none; }
+.film:hover .film__img img, .film:focus-visible .film__img img { transform: scale(1.06); filter: saturate(1.08); }
+.film:hover .film__img::after, .film:focus-visible .film__img::after { opacity: 0.9; transform: none; }
+.film__info { max-width: 380px; }
+.film__no { font-family: var(--f-label); font-size: var(--label-size); letter-spacing: 0.04em; color: var(--accent); font-variant-numeric: tabular-nums; }
+.film h3 { margin-top: 10px; font-size: clamp(2rem, 3vw, 2.9rem); font-weight: 400; line-height: 1.05; }
+.film h3 span { font-weight: 300; color: var(--accent); }
+.film__meta { margin-top: 12px; font-family: var(--f-label); font-size: 0.875rem; letter-spacing: var(--label-track); color: var(--text-on-dark); }
+.film__meta strong { color: var(--ivory); font-weight: 500; }
+.film__line { margin-top: 14px; color: var(--text-on-dark); font-size: 15.5px; }
+
+.work__outro { display: grid; gap: 22px; justify-items: start; }
+.work__outro p { font-family: var(--f-display); font-style: italic; font-weight: 300; font-size: clamp(2rem, 3.2vw, 3.2rem); line-height: 1.08; max-width: 14ch; }
+
+/* Stacked (mobile / tablet): posters take the full column, alternating sides, so it reads as a composed spread, not a shrunken strip */
+@media (max-width: 900px) {
+  .film__img { max-width: min(100%, 440px); }
+  .film--b .film__img, .film--b .film__info { margin-left: auto; }
+  .film__info { max-width: 440px; }
+}
+
+/* ——— Pinned horizontal mode (desktop, motion allowed) ———
+   work.js also sets --in (0→1) on each film while it travels in from the right: the poster is unmasked and the caption slides up. */
+.work.is-pinned { padding-block: 0; }
+.work.is-pinned .work__pin { position: relative; }
+.work.is-pinned .work__sticky { position: sticky; top: 0; height: 100svh; overflow: hidden; display: flex; align-items: center; }
+.work.is-pinned .work__track { flex-direction: row; align-items: center; gap: clamp(48px, 7vw, 120px); width: max-content; max-width: none; margin: 0; padding-inline: var(--gutter) clamp(120px, 14vw, 240px); will-change: transform; }
+.work.is-pinned .work__intro { width: min(46vw, 620px); flex: none; }
+.work.is-pinned .film { flex: none; grid-template-columns: auto; gap: 24px; }
+.work.is-pinned .film__img { max-width: none; height: min(50vh, 500px); }
+.work.is-pinned .film__img img { height: 100%; width: auto; max-width: none; }
+.work.is-pinned .film--b { transform: translateY(clamp(8px, 3vh, 32px)); margin-left: 0; }
+.work.is-pinned .film__img { clip-path: inset(0 calc((1 - var(--in, 1)) * 100%) 0 0); }
+.work.is-pinned .film__img img { transform: scale(calc(1.18 - var(--in, 1) * 0.18)); }
+.work.is-pinned .film:hover .film__img img { transform: scale(1.04); }
+.work.is-pinned .film__info { opacity: var(--in, 1); translate: calc((1 - var(--in, 1)) * 48px) 0; }
+.work.is-pinned .film__info { max-width: 360px; }
+.work.is-pinned .work__outro { flex: none; width: min(36vw, 420px); }
+.work.is-pinned .work__hint { display: flex; align-items: center; gap: 16px; font-family: var(--f-label); font-size: var(--label-size); letter-spacing: 0.04em; color: var(--accent); }
+.work.is-pinned .work__hint i { width: 64px; height: 1px; background: var(--hair-on-dark); position: relative; overflow: hidden; }
+.work.is-pinned .work__hint i::after { content: ''; position: absolute; inset: 0; background: var(--accent); animation: slide 2s var(--ease-io) infinite; }
+@keyframes slide { 0% { transform: translateX(-100%); } 70%, 100% { transform: translateX(100%); } }
+.work.is-pinned .work__meter { display: flex; align-items: center; gap: 18px; position: absolute; left: var(--gutter); right: var(--gutter); bottom: clamp(16px, 3vh, 32px); font-family: var(--f-label); font-size: var(--label-size); letter-spacing: 0.04em; color: var(--text-on-dark); font-variant-numeric: tabular-nums; }
+.work__meter #workCount { color: var(--accent); }
+.work__bar { flex: 1; height: 1px; background: var(--hair-on-dark); position: relative; }
+.work__bar i { position: absolute; inset: 0; background: var(--accent); transform-origin: left; transform: scaleX(0); }
+
+/* Pinned mode on short or zoomed-in viewports: scale type and posters by viewport height so nothing is clipped */
+@media (max-height: 760px) {
+  .work.is-pinned .work__intro { gap: 18px; }
+  .work.is-pinned .work__intro .title { font-size: clamp(2rem, min(6vw, 9.5vh), 5.4rem); }
+  .work.is-pinned .film__img { height: min(44vh, 440px); }
+  .work.is-pinned .film { gap: 14px; }
+  .work.is-pinned .film h3 { font-size: clamp(1.5rem, 4.2vh, 2.4rem); }
+}
+@media (max-height: 560px) {
+  .work.is-pinned .work__lede, .work.is-pinned .film__line { display: none; }
+  .work.is-pinned .film__img { height: min(48vh, 360px); }
+}
