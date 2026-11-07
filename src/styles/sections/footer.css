@@ -1,0 +1,31 @@
+/* footer.css */
+.footer { position: relative; z-index: 2; padding-top: clamp(40px, 6vw, 88px); padding-bottom: 28px; border-top: 1px solid var(--hair-on-dark); overflow: hidden; }
+.footer__cols { display: grid; grid-template-columns: 1.4fr 1fr 1.2fr; gap: 40px; padding-bottom: 56px; }
+.footer__brand { font-family: var(--f-display); font-size: 2rem; line-height: 1; }
+.footer__tag { margin-top: 12px; max-width: 30ch; color: var(--text-on-dark); font-size: 15px; }
+.footer__col h4 { font-family: var(--f-script); font-style: italic; font-size: calc(var(--script-size) * 1.15); color: var(--gold-hi); margin-bottom: 14px; font-weight: 500; }
+.footer__col ul { display: grid; gap: 2px; }
+.footer__col a { color: var(--text-on-dark); font-size: 15px; transition: color var(--t-hover) var(--ease-hover), padding-left var(--t-hover) var(--ease-hover); display: inline-block; padding-block: 6px; }
+.footer__col a:hover { color: var(--gold-hi); padding-left: 8px; }
+.footer__bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 22px; border-top: 1px solid var(--hair-on-dark); font-family: var(--f-label); font-size: var(--label-size); letter-spacing: var(--label-track); color: var(--text-on-dark); }
+@media (max-width: 760px) { .footer__cols { grid-template-columns: 1fr 1fr; } .footer__cols > div:first-child { grid-column: 1 / -1; } }
+.footer__col a { overflow-wrap: anywhere; }
+@media (max-width: 460px) { .footer__cols { grid-template-columns: 1fr; gap: 32px; } }
+/* keep the fixed back-to-top button clear of the copyright line */
+@media (max-width: 760px) { .footer__bottom { padding-right: 72px; } }
+
+/* Giant outlined name: font-size is fitted to the width by footer.js (cqw is the no-JS fallback) */
+.footer__markwrap { container-type: inline-size; margin-bottom: clamp(32px, 5vw, 72px); }
+.footer__mark { font-family: var(--f-display); font-weight: 300; font-size: clamp(2.4rem, 17cqw, 17rem); line-height: 0.85; letter-spacing: -0.04em; padding-block: 0.1em; white-space: nowrap; text-align: center; color: transparent; -webkit-text-stroke: 1px var(--gold); transition: color 1s var(--ease-out); user-select: none; }
+.footer__mark span { display: inline-block; padding-inline: 0.03em; }
+.footer__mark em { font-weight: 300; }
+.footer__mark:hover { color: color-mix(in srgb, var(--gold) 14%, transparent); }
+
+/* Made with MAYAA */
+.footer__made { display: inline-flex; align-items: center; gap: 10px; }
+.footer__made .maya { font-family: var(--f-display); font-style: italic; font-weight: 500; font-size: 1.45em; letter-spacing: 0.14em; line-height: 1;
+  background: linear-gradient(105deg, var(--gold) 0%, var(--gold-hi) 50%, var(--gold) 100%); background-size: 220% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent; animation: foil 9s linear infinite; }
+.footer__made i { width: 6px; height: 6px; border-radius: 50%; background: var(--gold-hi); position: relative; }
+.footer__made i::after { content: ''; position: absolute; inset: -5px; border: 1px solid var(--gold-hi); border-radius: 50%; opacity: 0; animation: reel-ping 2.6s var(--ease-out) infinite; }
+.footer__bottom { padding-right: 76px; }
