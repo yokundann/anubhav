@@ -20,9 +20,11 @@
     content="Kathmandu-based visual artist: art direction, production design, photography and film." />
   <meta name="twitter:image" content="https://anubhavkhati.com/assets/images/anubhav-avatar.jpg" />
 
-  <meta name="theme-color" content="#bcc4ce" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="/assets/images/anubhav-avatar.jpg" />
+  <meta name="theme-color" content="#050505" />
+  <link rel="icon" href="/favicon.ico" sizes="48x48" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
 
   <script>
@@ -32,7 +34,9 @@
       try { m = localStorage.getItem('mode'); } catch (e) { }
       if (m !== 'day' && m !== 'night') m = matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'day';
       document.documentElement.setAttribute('data-mode', m);
-      document.documentElement.classList.add('js');
+      document.documentElement.classList.add('js', 'is-loading');
+      /* Failsafe: never leave a visitor stuck behind the loader */
+      setTimeout(function () { document.documentElement.classList.remove('is-loading'); var l = document.getElementById('loader'); if (l) l.remove(); }, 8000);
     })();
   </script>
 
@@ -48,6 +52,7 @@
   <link rel="stylesheet" href="/src/styles/base.css" />
   <link rel="stylesheet" href="/src/styles/components.css" />
   <link rel="stylesheet" href="/src/styles/sections.css" />
+  <link rel="stylesheet" href="/src/styles/motion.css" />
 
   <script type="application/ld+json">
   {
@@ -71,6 +76,32 @@
 <body>
 
   <a class="skip-link" href="#contenido">Skip to content</a>
+
+  <!-- ══ LOADER: a slate, a reel, a count-up, then the iris opens ══ -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__orange"></div>
+    <div class="loader__ink">
+      <i class="loader__strip loader__strip--l"></i><i class="loader__strip loader__strip--r"></i>
+      <span class="loader__c loader__c--tl"></span><span class="loader__c loader__c--tr"></span><span
+        class="loader__c loader__c--bl"></span><span class="loader__c loader__c--br"></span>
+      <p class="loader__top"><span class="loader__rec"></span>Rolling</p>
+      <div class="loader__core">
+        <svg class="loader__reel" viewBox="0 0 200 200">
+          <circle class="loader__track" cx="100" cy="100" r="90" />
+          <circle class="loader__bar" id="loaderBar" cx="100" cy="100" r="90" />
+          <g class="loader__spokes">
+            <path
+              d="M100 100 L100 22 M100 100 L167.5 61 M100 100 L167.5 139 M100 100 L100 178 M100 100 L32.5 139 M100 100 L32.5 61" />
+            <circle cx="100" cy="100" r="78" />
+          </g>
+          <circle class="loader__sun" cx="100" cy="100" r="26" />
+        </svg>
+        <p class="loader__name"><span>Anubhav Khati</span></p>
+      </div>
+      <p class="loader__scene">Scene 07<br /><em>the next frame</em></p>
+      <p class="loader__count"><b id="loaderNum">000</b><small>%</small></p>
+    </div>
+  </div>
 
   <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg">
     <defs>
@@ -130,7 +161,7 @@
         <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
         <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
       </symbol>
-      <symbol id="i-facebook" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+      <symbol id="i-facebook" viewBox="0.6 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
         stroke-linecap="round" stroke-linejoin="round">
         <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
       </symbol>
@@ -230,7 +261,7 @@
 
       <div class="hero__grid">
         <div class="hero__copy">
-          <p class="hero__hi">Hi, I'm Anubhav <br> Hailing All the way from Kathmandu, Nepal</p>
+          <p class="hero__hi">Hi, I'm Anubhav Khati, Kathmandu</p>
           <h1 class="hero__title">
             <span class="sr-only">Anubhav Khati: </span>Visual Artist &amp; Visual Storyteller
           </h1>
@@ -300,8 +331,11 @@
           </div>
         </div>
         <figure class="stats__avatar">
-          <img src="/assets/images/anubhav-avatar.jpg" alt="Illustrated portrait of Anubhav Khati waving" width="320"
-            height="342" loading="lazy" />
+          <img src="/assets/images/anubhav-avatar-eyes.jpg" alt="Illustrated portrait of Anubhav Khati waving"
+            width="320" height="342" loading="lazy" />
+          <span class="eye eye--l" style="left:44.97%;top:45.09%;width:5.85%;height:5.69%"
+            aria-hidden="true"><i></i></span><span class="eye eye--r"
+            style="left:58.49%;top:46.04%;width:5.52%;height:5.61%" aria-hidden="true"><i></i></span>
         </figure>
         <div class="stats__col stats__col--r">
           <div class="stat"><strong data-count="2">2</strong>
@@ -337,6 +371,7 @@
             <span class="viewfinder__c viewfinder__c--tl"></span><span
               class="viewfinder__c viewfinder__c--tr"></span><span class="viewfinder__c viewfinder__c--bl"></span><span
               class="viewfinder__c viewfinder__c--br"></span>
+            <span class="viewfinder__rec" aria-hidden="true"><i></i>REC <b id="tc">00:00:00</b></span>
             <figcaption>Directing on set, behind the camera</figcaption>
           </figure>
           <aside class="card card--ink open-card" aria-label="Open to opportunities">
@@ -875,6 +910,8 @@
   <a href="#home" class="to-top" id="toTop" aria-label="Back to top"><svg class="icon" aria-hidden="true">
       <use href="#i-arrow" />
     </svg></a>
+  <div class="timeline" id="timeline" aria-hidden="true"><i></i></div>
+  <div class="grain" aria-hidden="true"></div>
   <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
   <script type="module" src="/src/scripts/main.js"></script>
