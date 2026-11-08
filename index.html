@@ -21,11 +21,13 @@
   <meta name="twitter:image" content="https://anubhavkhati.com/assets/images/anubhav-avatar.jpg" />
 
   <meta name="theme-color" content="#050505" />
-  <link rel="icon" href="/favicon.ico" sizes="48x48" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-  <link rel="manifest" href="/site.webmanifest" />
+  <!-- Favicon set. The ?v= suffix forces browsers to drop a cached "no icon" answer; bump it whenever the icon changes. -->
+  <link rel="icon" href="/favicon.ico?v=3" sizes="any" />
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png?v=3" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=3" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3" />
+  <link rel="manifest" href="/site.webmanifest?v=3" />
 
   <script>
     /* Day / night: saved choice, else system preference. Set before first paint so there is no flash. */
@@ -94,6 +96,7 @@
               d="M100 100 L100 22 M100 100 L167.5 61 M100 100 L167.5 139 M100 100 L100 178 M100 100 L32.5 139 M100 100 L32.5 61" />
             <circle cx="100" cy="100" r="78" />
           </g>
+          <circle class="loader__sun loader__sun--glow" cx="100" cy="100" r="44" />
           <circle class="loader__sun" cx="100" cy="100" r="26" />
         </svg>
         <p class="loader__name"><span>Anubhav Khati</span></p>
@@ -332,7 +335,7 @@
         </div>
         <figure class="stats__avatar">
           <img src="/assets/images/anubhav-avatar-eyes.jpg" alt="Illustrated portrait of Anubhav Khati waving"
-            width="320" height="342" loading="lazy" />
+            width="320" height="342" loading="lazy" decoding="async" />
           <span class="eye eye--l" style="left:44.97%;top:45.09%;width:5.85%;height:5.69%"
             aria-hidden="true"><i></i></span><span class="eye eye--r"
             style="left:58.49%;top:46.04%;width:5.52%;height:5.61%" aria-hidden="true"><i></i></span>
@@ -367,7 +370,7 @@
         <div class="about__aside">
           <figure class="viewfinder">
             <img src="/assets/images/on-set-directing.jpg" alt="Anubhav directing on set behind the monitor" width="720"
-              height="690" loading="lazy" />
+              height="690" loading="lazy" decoding="async" />
             <span class="viewfinder__c viewfinder__c--tl"></span><span
               class="viewfinder__c viewfinder__c--tr"></span><span class="viewfinder__c viewfinder__c--bl"></span><span
               class="viewfinder__c viewfinder__c--br"></span>
@@ -497,7 +500,7 @@
         <article class="film card" tabindex="0" aria-label="Aavritti, short film directed by Anubhav Khati">
           <div class="film__img">
             <img src="/assets/images/poster-aavritti.jpg" alt="Aavritti short film official poster" width="658"
-              height="930" loading="lazy" />
+              height="930" loading="lazy" decoding="async" />
             <span class="pill pill--ink">Short film</span>
             <span class="pill pill--white">2023</span>
           </div>
@@ -512,7 +515,7 @@
         <article class="film film--b card" tabindex="0" aria-label="Ananta, short film directed by Anubhav Khati">
           <div class="film__img">
             <img src="/assets/images/poster-ananta.jpg" alt="Ananta short film official poster" width="990"
-              height="1378" loading="lazy" />
+              height="1378" loading="lazy" decoding="async" />
             <span class="pill pill--ink">Short film</span>
             <span class="pill pill--white">2023</span>
           </div>
@@ -527,7 +530,7 @@
         <article class="film card" tabindex="0" aria-label="Sanyati, short film directed by Anubhav Khati">
           <div class="film__img">
             <img src="/assets/images/poster-sanyati.jpg" alt="Sanyati short film official poster" width="990"
-              height="1290" loading="lazy" />
+              height="1290" loading="lazy" decoding="async" />
             <span class="pill pill--ink">Short film</span>
           </div>
           <div class="film__info">
@@ -652,7 +655,7 @@
         <figure class="edu__award">
           <img src="/assets/images/award-aavritti.jpg"
             alt="Honorable Mention certificate for Aavritti, Student World Impact Film Festival" width="540"
-            height="660" loading="lazy" />
+            height="660" loading="lazy" decoding="async" />
           <figcaption>Honorable Mention, Student World Impact Film Festival</figcaption>
         </figure>
       </div>
@@ -753,7 +756,8 @@
 
       <div class="contact">
         <div class="contact__photo">
-          <img src="/assets/images/anubhav-portrait.jpg" alt="" width="820" height="823" loading="lazy" />
+          <img src="/assets/images/anubhav-portrait.jpg" alt="" width="820" height="823" loading="lazy"
+            decoding="async" />
           <button class="clap" id="clap" type="button"
             aria-label="Clapperboard: scene 07, the next frame, directed by Anubhav Khati. Press for another take.">
             <span class="clap__top" id="clapTop"></span>
